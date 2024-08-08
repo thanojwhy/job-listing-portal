@@ -30,14 +30,13 @@ const JOBS=[
     }
 ]
 
-const commonDashboard = () =>{
+const Jobs = () =>{
 
     return (
         <div className='card-group row shadow p-3 m-3'>
-            <p>Here are some popular jobs right now </p>
             <JobItemList jobs={JOBS}/>
         </div>
     )
 }
 
-export default commonDashboard;
+export default Jobs;
