@@ -1,5 +1,7 @@
 import React,{useState} from 'react';
 
+import ArrowNav from '../Util/ArrowNav';
+
 import './Card.css';
 
 const Card = (props) =>{
@@ -13,8 +15,8 @@ const Card = (props) =>{
     return (
         <div className={`card ${props.classnames}`}>
             {props.header && 
-                <div className='card-header bg-transparent border-0 d-flex justify-content-between'>
-                    <h4>{props.header}</h4>
+                <div className='card-header bg-transparent border-0 d-flex justify-content-between align-items-center'>
+                    <h4><ArrowNav dir={-1}/>{props.header}</h4>
                     <button type='button' className={`btn ${didApply ? 'btn-primary' : 'btn-success'}`} onClick={apply}>{didApply ? 'Applied' : 'Apply'}</button>
                 </div>
             }
