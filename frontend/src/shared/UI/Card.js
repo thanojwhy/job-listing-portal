@@ -1,15 +1,20 @@
-import React,{useState} from 'react';
+import React,{useContext, useState} from 'react';
+import { NavLink } from 'react-router-dom';
 
 import ArrowNav from '../Util/ArrowNav';
+import Button from '../FormElems/Button';
+import { AuthContext } from '../context/auth-context';
 
 import './Card.css';
 
 const Card = (props) =>{
 
-    const [didApply,setDidApply]=useState('');
+    const auth=useContext(AuthContext);
+
+    const [didApply,setDidApply]=useState(false);
 
     const apply = () =>{
-        setDidApply('true');
+        setDidApply(true);
     }
 
     return (
@@ -17,17 +22,23 @@ const Card = (props) =>{
             {props.header && 
                 <div className='card-header bg-transparent border-0 d-flex justify-content-between align-items-center'>
                     <h4><ArrowNav dir={-1}/>{props.header}</h4>
-                    <button type='button' className={`btn ${didApply ? 'btn-primary' : 'btn-success'}`} onClick={apply}>{didApply ? 'Applied' : 'Apply'}</button>
+                    {auth.isLoggedIn ?
+                        <Button type='button' className={`btn ${didApply ? 'btn-primary' : 'btn-success'}`} onClick={apply}>{didApply ? 'Applied' : 'Apply'}</Button>
+                        :
+                        <NavLink to='/auth' className='btn btn-outline-primary' >Login to Apply</NavLink>
+                    }
                 </div>
             }
             <div className='card-body'>
-                <div className='header d-flex'>
-                    <b className='border border-3 fs-1 me-3 rounded'>{props.company[0]}</b>
-                    <div className='card-title'>
-                        <h5>{props.title}</h5>
-                        <p className='text-muted'>{props.company}</p>
+                {props.title && 
+                    <div className='header d-flex'>
+                        {props.company && <b className='border border-3 fs-1 me-3 rounded'>{props.company[0]}</b>}
+                        <div className='card-title'>
+                            <h5>{props.title}</h5>
+                            <p className='text-muted'>{props.company}</p>
+                        </div>
                     </div>
-                </div>
+                }
                 <p className='card-text'>{props.text}</p>
                 {props.children}
             </div>
