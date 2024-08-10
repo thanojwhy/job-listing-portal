@@ -3,12 +3,13 @@ import React from 'react';
 import JobItem from './job-item';
 
 const JobItemList = (props) =>{
+    
     return (
-        <div>
+        <React.Fragment>
             {props.jobs.map((job)=>(
                 <JobItem key={job.id} job={job} />
             ))}
-        </div>
+        </React.Fragment>
     );
 }
 

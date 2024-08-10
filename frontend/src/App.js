@@ -11,17 +11,17 @@ import Auth from './user/shared/Auth';
 import { AuthContext } from './shared/context/auth-context';
 
 const App = () => {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('isAuth'));
+  const isAuth= localStorage.getItem('isAuth');
+  const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
 
   const login = useCallback(()=>{
     setIsLoggedIn(true);
-    localStorage.setItem('isAuth','true');
+    localStorage.setItem('isAuth',true);
   },[])
 
   const logout = useCallback(()=>{
     setIsLoggedIn(false);
-    localStorage.setItem('isAuth','false');
+    localStorage.removeItem('isAuth');
   },[])
 
   let routes;
