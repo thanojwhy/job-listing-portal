@@ -2,7 +2,7 @@ import React from 'react';
 
 const Input = (props) =>{
     return (
-        <div className='form-floating mb-3 col-md-7'>
+        <div className='form-floating mb-3'>
             <input
                 className={`form-control shadow-none  ${props.classnames}`} 
                 type={props.type} 

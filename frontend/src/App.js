@@ -6,7 +6,7 @@ import CommonDashboard from './shared/Dashboard/CommonDashboard';
 import AuthDashboard from './shared/Dashboard/AuthDashboard';
 import Jobs from './user/employer/Jobs';
 import JobDetails from './user/shared/job-details';
-import EditProfile from './profile/EditProfile';
+import Profile from './user/employee/Profile';
 import Auth from './user/shared/Auth';
 import { AuthContext } from './shared/context/auth-context';
 import { AnimatePresence } from 'framer-motion';
@@ -15,7 +15,6 @@ import Animation from './shared/Util/Animation';
 const JOBS = [
   {
       id: 'j1',
-      created: 'c1',
       title: "Python Developer",
       company: "MR",
       type: "Full Time",
@@ -123,6 +122,63 @@ const JOBS = [
   }
 ];
 
+// const USERS = [
+//   {
+//     id: 'u1',
+//     name: 'John Doe',
+//     email: 'john@example.com',
+//     password: '123456',
+//     type:'Employer'
+//   },
+//   {
+//     id: 'u2',
+//     name: 'Kate Abdo',
+//     email: 'Katie@example.com',
+//     password: '123456',
+//     type:'Employee'
+//   },
+//   {
+//     id: 'u3',
+//     name: 'Ben Kenobi',
+//     email: 'Ben@example.com',
+//     password: '123456',
+//     type:'Employee'
+//   },
+// ]
+
+const EMPS = [
+  {
+    id: 'e1',
+    name: {
+      first: 'Kate',
+      last: 'Abdo'
+    },
+    email: 'Katie@example.com',
+    location: 'California',
+    experience: [
+      {
+        position : 'Intern',
+        company: 'BWS',
+        startDate: '2022-08-25',
+        endDate: '2024-03-03',
+        salary: 130000,
+      },
+    ],
+    education: [
+      {
+        degree: 'Bachelor of Science in Computer Science',
+        institution: 'University of California, Berkeley',
+        cgpa: 4.15,
+        startDate:'2018-08-12',
+        endDate: '2022-07-03',
+      }
+    ],
+    skills: ['MERN Stack','Spring','Java','Python'],
+    linkedin : "",
+    gitHub : "",
+  }
+]
+
 const App = () => {
   const isAuth=localStorage.getItem('isAuth');
   const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
@@ -151,7 +207,7 @@ const App = () => {
     routes = (
       <React.Fragment>
         <Route path='/' element={<Animation><AuthDashboard /></Animation>} />
-        <Route path='/profile' element={<EditProfile />} />
+        <Route path='/profile' element={<Animation><Profile EMP={EMPS[0]} /></Animation>} />
         <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
         <Route path='/jobs/:uid/applied' element={<Jobs JOBS={jobsByUserId} user={employee}/>} />
       </React.Fragment>

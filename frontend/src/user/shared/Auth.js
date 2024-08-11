@@ -48,7 +48,7 @@ const Auth = () =>{
                 <h1>{loginMode ? 'Login' : 'Sign Up'}</h1> <br />
                 <form className='form needs-validation' onSubmit={submitHandler}>
                     {!loginMode &&
-                        <Input type='text' label='Full Name' name='name' value={formData.name} onChange={inputChangeHandler} />
+                        <Input classnames='col-md-7' type='text' label='Full Name' name='name' value={formData.name} onChange={inputChangeHandler} />
                     }
                     {!loginMode &&
                         <div className='col-6 mb-3'>
@@ -63,8 +63,8 @@ const Auth = () =>{
                             </div>
                         </div>
                     }
-                    <Input className='is-invalid' type='email' label='Email' name='email' invalid='Please enter a valid email' required value={formData.email} onChange={inputChangeHandler} />
-                    <Input type='password' label='Password' name='password' required min={6} invalid='Password should be at least 6 characters' onChange={inputChangeHandler}/>
+                    <Input className='is-invalid col-md-7' type='email' label='Email' name='email' invalid='Please enter a valid email' required value={formData.email} onChange={inputChangeHandler} />
+                    <Input classnames='col-md-7' type='password' label='Password' name='password' required min={6} invalid='Password should be at least 6 characters' onChange={inputChangeHandler}/>
                     <Button className='btn-primary' type='submit'>{loginMode ? 'Login' : 'Sign Up'}</Button>
                 </form>
             </Card>
