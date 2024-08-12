@@ -10,6 +10,7 @@ import './Card.css';
 const EMPS = [
     {
       id: 'e1',
+      userId:'u1',
       name: 'Kate Abdo',
       email: 'Katie@example.com',
       password: '123456',
@@ -36,7 +37,7 @@ const EMPS = [
       skills: ['MERN Stack','Spring','Java','Python'],
       linkedin : "",
       gitHub : "",
-      applications: ['j1'],
+      applications: ['j1','j2'],
     }
   ]
 
@@ -46,7 +47,7 @@ const Card = (props) =>{
     const {jobId}=useParams();
 
     const applied=()=>{
-        const emp=EMPS.find(emp=>emp.id===auth.userId);
+        const emp=EMPS.find(emp=>emp.id===auth.eId);
         return emp ? emp.applications.includes(jobId) : false;
     }
 

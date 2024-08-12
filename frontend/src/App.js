@@ -64,7 +64,7 @@ const JOBS = [
           "Collaborate with backend developers to integrate APIs",
           "Conduct code reviews and ensure adherence to best practices"
       ],
-      applicants: ['e2', 'e3'],
+      applicants: ['e1','e2', 'e3'],
   },
   {
       id: 'j3',
@@ -122,23 +122,29 @@ const JOBS = [
   }
 ];
 
-const EMPR = [
-  {
-    id: 'er1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    password: '123456',
-    type:'Employer'
-  },
-]
+// const USERS = [
+//   {
+//     id: 'u1',
+//     name: 'Kate Abdo',
+//     email: 'kate@example.com',
+//     password: '123456',
+//     type:'Employee'
+//   },
+//   {
+//     id: 'u2',
+//     name: 'John Doe',
+//     email: 'john@example.com',
+//     password: '123456',
+//     type:'Employer'
+//   },
+// ]
 
 const EMPS = [
   {
     id: 'e1',
+    userId: 'u1',
     name: 'Kate Abdo',
     email: 'Katie@example.com',
-    password: '123456',
-    type:'Employee',
     location: 'California',
     experience: [
       {
@@ -161,51 +167,85 @@ const EMPS = [
     skills: ['MERN Stack','Spring','Java','Python'],
     linkedin : "",
     gitHub : "",
-    applications: ['j1'],
+    applications: ['j1','j2'],
+  }
+]
+
+const EMPR=[
+  {
+    id: 'er1',
+    userId: 'u2',
+    name: 'John Doe',
+    email: 'john@example.com',
+    company: 'ABC',
+    location: 'New York',
   }
 ]
 
 const App = () => {
   const isAuth=localStorage.getItem('isAuth');
   const uid=localStorage.getItem('userId');
+  const utype=localStorage.getItem('userType');
+
   const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
   const [userId,setUserId]=useState(uid);
+  const [userType,setUserType]=useState(utype);
 
   const login = useCallback(()=>{
     setIsLoggedIn(true);
-    setUserId('e1');
+    setUserId('u1');
+    setUserType('Employee');
+
     localStorage.setItem('isAuth',true);
-    localStorage.setItem('userId','e1');
+    localStorage.setItem('userId','u1');
+    localStorage.setItem('userType','Employee')
   },[])
 
   const logout = useCallback(()=>{
     setIsLoggedIn(false);
-    localStorage.removeItem('userId');
+
     localStorage.removeItem('isAuth');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+
   },[])
+
+  const emp=EMPS.find(emp=>emp.userId===uid)
+  const eId=emp? emp.id : null;
 
   let routes;
 
-  const jobsByUserId=JOBS.filter((job)=>{
+  const jobsByEmployeeId=JOBS.filter((job)=>{
     return job.applicants.find((e)=>{
-      return e === userId;
+      return e === eId;
     });
   })
 
   if (isLoggedIn){
-    routes = (
-      <React.Fragment>
-        <Route path='/' element={<Animation><AuthDashboard /></Animation>} />
-        <Route path='/profile' element={<Animation><Profile EMP={EMPS[0]} /></Animation>} />
-        <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
-        <Route path='/jobs/:uid/applied' element={<Jobs JOBS={jobsByUserId} user={userId}/> } />
-      </React.Fragment>
-    )
+    if(utype==='Employee'){
+      routes = (
+        <React.Fragment>
+          <Route path='/' element={<Animation><AuthDashboard EMP={EMPS[0]} userType={utype}/></Animation>} />
+          <Route path='/profile' element={<Animation><Profile EMP={EMPS[0]} userType={utype}/></Animation>} />
+          <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
+          <Route path='/jobs/:eid/applied' element={<Jobs JOBS={jobsByEmployeeId} user={eId}/> } />
+        </React.Fragment>
+      )
+    } else {
+      routes = (
+        <React.Fragment>
+          <Route path='/' element={<Animation><AuthDashboard EMPR={EMPR[0]} userType={utype}/></Animation>} />
+          <Route path='/profile' element={<Animation><Profile EMPR={EMPR[0]} userType={utype}/></Animation>} />
+          <Route path='/jobs/new' element={<Jobs JOBS={JOBS}/>} />
+          <Route path='/jobs/:uid/posted' element={<Jobs JOBS={jobsByEmployeeId}/> } />
+        </React.Fragment>
+      )
+    }
   } else{
     routes = (
       <React.Fragment>
         <Route path='/' element={<Animation><CommonDashboard /></Animation>} />
-        <Route path='/jobs' element={<Animation><Jobs JOBS={JOBS}/></Animation>} />
+        <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
         <Route path='/auth' element={<Animation><Auth /></Animation>} />
       </React.Fragment>
     )
@@ -214,7 +254,7 @@ const App = () => {
   const location=useLocation();
 
   return (
-    <AuthContext.Provider value={{isLoggedIn,userId,login,logout}} >
+    <AuthContext.Provider value={{isLoggedIn,userId,userType,eId,login,logout}} >
         <NavMain />
         <main>
           <AnimatePresence mode='wait'>
