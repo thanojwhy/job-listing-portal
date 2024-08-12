@@ -7,7 +7,7 @@ const JobItemList = (props) =>{
     return (
         <React.Fragment>
             {props.jobs.map((job)=>(
-                <JobItem key={job.id} job={job} />
+                <JobItem key={job.id} job={job}/>
             ))}
         </React.Fragment>
     );

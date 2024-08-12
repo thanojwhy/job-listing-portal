@@ -1,5 +1,5 @@
 import React,{useContext, useState} from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 import ArrowNav from '../Util/ArrowNav';
 import Button from '../FormElems/Button';
@@ -7,11 +7,50 @@ import { AuthContext } from '../context/auth-context';
 
 import './Card.css';
 
+const EMPS = [
+    {
+      id: 'e1',
+      name: 'Kate Abdo',
+      email: 'Katie@example.com',
+      password: '123456',
+      type:'Employee',
+      location: 'California',
+      experience: [
+        {
+          position : 'Intern',
+          company: 'BWS',
+          startDate: '2022-08-25',
+          endDate: '2024-03-03',
+          salary: 130000,
+        },
+      ],
+      education: [
+        {
+          degree: 'Bachelor of Science in Computer Science',
+          institution: 'University of California, Berkeley',
+          cgpa: 4.15,
+          startDate:'2018-08-12',
+          endDate: '2022-07-03',
+        }
+      ],
+      skills: ['MERN Stack','Spring','Java','Python'],
+      linkedin : "",
+      gitHub : "",
+      applications: ['j1'],
+    }
+  ]
+
 const Card = (props) =>{
 
     const auth=useContext(AuthContext);
+    const {jobId}=useParams();
 
-    const [didApply,setDidApply]=useState(false);
+    const applied=()=>{
+        const emp=EMPS.find(emp=>emp.id===auth.userId);
+        return emp ? emp.applications.includes(jobId) : false;
+    }
+
+    const [didApply,setDidApply]=useState(applied);
 
     const apply = () =>{
         setDidApply(true);

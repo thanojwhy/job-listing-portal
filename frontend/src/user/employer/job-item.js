@@ -8,7 +8,7 @@ import Card from '../../shared/UI/Card';
 
 const JobItem = (props) =>{
 
-    const job=props.job;
+    const {job}=props;
 
     const timeAgo=<TimeAgo date={job.posted} />
 
@@ -16,7 +16,7 @@ const JobItem = (props) =>{
 
     return ( 
         <Link to={`/jobs/${job.id}`} className='text-dark text-decoration-none'>
-            <Card 
+            <Card
                 classnames="mb-4"
                 title={job.title}
                 company={job.company}

@@ -34,7 +34,7 @@ const Jobs = (props) =>{
             }
             <Animation>
                 <div className='row row-cols-1 row-cols-sm-2 row-cols-md-3 mt-3'>
-                    <JobItemList jobs={JOBS} user={user}/>
+                    <JobItemList jobs={JOBS}/>
                 </div>
             </Animation>
         </div>
