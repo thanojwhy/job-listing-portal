@@ -13,8 +13,11 @@ const NavNavLinks = () =>{
         <div className='d-flex justify-content-end col-9 nav nav-pills'>
             <NavLink to='/' className='nav-link'>Home</NavLink>
             <NavLink to='/jobs' className='nav-link'>Jobs</NavLink>
-            {auth.isLoggedIn &&
+            {auth.isLoggedIn && auth.userType==='Employee' &&
                 <NavLink to='/profile' className='nav-link'>Profile</NavLink>
+            }
+            {auth.isLoggedIn && auth.userType==='Employer' &&
+                <NavLink to='/job/new' className='nav-link'>New Job</NavLink>
             }
             {!auth.isLoggedIn &&
                 <NavLink to='/auth' className='nav-link'>Login</NavLink>

@@ -63,7 +63,7 @@ const JOBS = [
     },
     {
         id: 'j3',
-        created: 'c3',
+        created: 'c1',
         title: "Data Analyst",
         company: "XYZ Solutions",
         type: "Full Time",

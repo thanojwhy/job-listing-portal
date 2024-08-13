@@ -5,6 +5,7 @@ import NavMain from './shared/Navigation/NavMain';
 import CommonDashboard from './shared/Dashboard/CommonDashboard';
 import AuthDashboard from './shared/Dashboard/AuthDashboard';
 import Jobs from './user/employer/Jobs';
+import JobPost from './user/employer/job-post';
 import JobDetails from './user/shared/job-details';
 import Profile from './user/employee/Profile';
 import Auth from './user/shared/Auth';
@@ -15,6 +16,7 @@ import Animation from './shared/Util/Animation';
 const JOBS = [
   {
       id: 'j1',
+      created:'c1',
       title: "Python Developer",
       company: "MR",
       type: "Full Time",
@@ -68,7 +70,7 @@ const JOBS = [
   },
   {
       id: 'j3',
-      created: 'c3',
+      created: 'c1',
       title: "Data Analyst",
       company: "XYZ Solutions",
       type: "Full Time",
@@ -122,22 +124,22 @@ const JOBS = [
   }
 ];
 
-// const USERS = [
-//   {
-//     id: 'u1',
-//     name: 'Kate Abdo',
-//     email: 'kate@example.com',
-//     password: '123456',
-//     type:'Employee'
-//   },
-//   {
-//     id: 'u2',
-//     name: 'John Doe',
-//     email: 'john@example.com',
-//     password: '123456',
-//     type:'Employer'
-//   },
-// ]
+const USERS = [
+  {
+    id: 'u1',
+    name: 'Kate Abdo',
+    email: 'kate@example.com',
+    password: '123456',
+    type:'Employee'
+  },
+  {
+    id: 'u2',
+    name: 'John Doe',
+    email: 'john@example.com',
+    password: '123456',
+    type:'Employer'
+  },
+]
 
 const EMPS = [
   {
@@ -173,71 +175,73 @@ const EMPS = [
 
 const EMPR=[
   {
-    id: 'er1',
+    id: 'c1',
     userId: 'u2',
     name: 'John Doe',
     email: 'john@example.com',
     company: 'ABC',
     location: 'New York',
+    posted:['j1','j3']
   }
 ]
 
 const App = () => {
   const isAuth=localStorage.getItem('isAuth');
-  const uid=localStorage.getItem('userId');
-  const utype=localStorage.getItem('userType');
 
   const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
-  const [userId,setUserId]=useState(uid);
-  const [userType,setUserType]=useState(utype);
+
+  const uid='u1'
+
+  const user=USERS.find((user)=>user.id===uid);
+  const emp=EMPS.find(emp=>emp.userId===uid);
+  const emr=EMPR.find(emr=>emr.userId===uid);
+
+  const userType=user.type;
 
   const login = useCallback(()=>{
     setIsLoggedIn(true);
-    setUserId('u1');
-    setUserType('Employee');
-
     localStorage.setItem('isAuth',true);
-    localStorage.setItem('userId','u1');
-    localStorage.setItem('userType','Employee')
   },[])
 
   const logout = useCallback(()=>{
     setIsLoggedIn(false);
-
     localStorage.removeItem('isAuth');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userType');
-
   },[])
 
-  const emp=EMPS.find(emp=>emp.userId===uid)
-  const eId=emp? emp.id : null;
+  let userTypeId;
+  if(user.type==='Employee'){
+    userTypeId=emp? emp.id : null;
+  } else{
+    userTypeId=emr? emr.id : null;
+  }
 
   let routes;
 
   const jobsByEmployeeId=JOBS.filter((job)=>{
     return job.applicants.find((e)=>{
-      return e === eId;
+      return e === userTypeId;
     });
   })
 
+  const jobsByEmployerId=JOBS.filter(job=>job.created===userTypeId);
+
   if (isLoggedIn){
-    if(utype==='Employee'){
+    if(user.type==='Employee'){
       routes = (
         <React.Fragment>
-          <Route path='/' element={<Animation><AuthDashboard EMP={EMPS[0]} userType={utype}/></Animation>} />
-          <Route path='/profile' element={<Animation><Profile EMP={EMPS[0]} userType={utype}/></Animation>} />
+          <Route path='/' element={<Animation><AuthDashboard EMP={EMPS[0]} /></Animation>} />
+          <Route path='/profile' element={<Animation><Profile EMP={EMPS[0]} /></Animation>} />
           <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
-          <Route path='/jobs/:eid/applied' element={<Jobs JOBS={jobsByEmployeeId} user={eId}/> } />
+          <Route path='/jobs/:employeeId/applied' element={<Jobs JOBS={jobsByEmployeeId}/> } />
         </React.Fragment>
       )
     } else {
       routes = (
         <React.Fragment>
-          <Route path='/' element={<Animation><AuthDashboard EMPR={EMPR[0]} userType={utype}/></Animation>} />
-          <Route path='/profile' element={<Animation><Profile EMPR={EMPR[0]} userType={utype}/></Animation>} />
-          <Route path='/jobs/new' element={<Jobs JOBS={JOBS}/>} />
-          <Route path='/jobs/:uid/posted' element={<Jobs JOBS={jobsByEmployeeId}/> } />
+          <Route path='/' element={<Animation><AuthDashboard EMPR={EMPR[0]}/></Animation>} />
+          <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
+          <Route path='/job/new' element={<Animation><JobPost/></Animation>} />
+          <Route path='/jobs/:employerId/posted' element={<Jobs JOBS={jobsByEmployerId}/> } />
         </React.Fragment>
       )
     }
@@ -254,7 +258,7 @@ const App = () => {
   const location=useLocation();
 
   return (
-    <AuthContext.Provider value={{isLoggedIn,userId,userType,eId,login,logout}} >
+    <AuthContext.Provider value={{isLoggedIn,userType,userTypeId,login,logout}} >
         <NavMain />
         <main>
           <AnimatePresence mode='wait'>

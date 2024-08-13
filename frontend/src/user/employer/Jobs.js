@@ -11,13 +11,13 @@ import './Jobs.css';
 
 const Jobs = (props) =>{
 
-    const {JOBS,user}=props;
+    const {JOBS}=props;
 
     const auth=useContext(AuthContext);
     const location = useLocation();
 
     const globalActive = location.pathname === '/jobs'
-    const appliedActive = location.pathname.endsWith(`/applied`);
+    const appliedActive = location.pathname.startsWith(`/jobs/${auth.userTypeId}`);
 
     return (
         <div className=' m-3 p-3 shadow'>
@@ -27,8 +27,10 @@ const Jobs = (props) =>{
                     <Link to='/jobs'>
                         <Button className={`job-section-btn ${globalActive ? 'active' : ''}`} dataBsToggle='tab' ariaSelected={globalActive ? 'true' : 'false'} >Browse Jobs</Button>
                     </Link>
-                    <Link to={`/jobs/${user}/applied`}>
-                        <Button className={`job-section-btn ${appliedActive ? 'active' : ''}`} dataBsToggle='tab' ariaSelected={appliedActive ? 'true' : 'false'}>Applied Jobs</Button>
+                    <Link to={`/jobs/${auth.userTypeId}/${auth.userType==='Employee' ? 'applied':'posted'}` }>
+                        <Button className={`job-section-btn ${appliedActive ? 'active' : ''}`} dataBsToggle='tab' ariaSelected={appliedActive ? 'true' : 'false'}>
+                            {auth.userType==='Employee' ? 'Applied Jobs' : 'Posted Jobs'}
+                        </Button>
                     </Link>
                 </ul>
             }
