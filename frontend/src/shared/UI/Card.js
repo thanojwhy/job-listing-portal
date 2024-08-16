@@ -54,7 +54,7 @@ const Card = (props) =>{
                 <p className='card-text'>{props.text}</p>
                 {props.children}
             </div>
-            <div className='card-footer bg-transparent text-muted'>{props.footer}</div>
+            {props.footer && <div className='card-footer bg-transparent text-muted'>{props.footer}</div>}
         </div>
     )
 }

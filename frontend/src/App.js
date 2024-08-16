@@ -12,6 +12,7 @@ import Auth from './user/shared/Auth';
 import { AuthContext } from './shared/context/auth-context';
 import { AnimatePresence } from 'framer-motion';
 import Animation from './shared/Util/Animation';
+import EmployeeDetails from './user/employee/emp-details';
 
 const JOBS = [
   {
@@ -167,8 +168,8 @@ const EMPS = [
       }
     ],
     skills: ['MERN Stack','Spring','Java','Python'],
-    linkedin : "",
-    gitHub : "",
+    linkedin : "https://linkedin.com",
+    gitHub : "https://github.com",
     applications: ['j1','j2'],
   }
 ]
@@ -190,7 +191,7 @@ const App = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(isAuth);
 
-  const uid='u1'
+  const uid='u2'
 
   const user=USERS.find((user)=>user.id===uid);
   const emp=EMPS.find(emp=>emp.userId===uid);
@@ -242,6 +243,7 @@ const App = () => {
           <Route path='/jobs' element={<Jobs JOBS={JOBS}/>} />
           <Route path='/job/new' element={<Animation><JobPost/></Animation>} />
           <Route path='/jobs/:employerId/posted' element={<Jobs JOBS={jobsByEmployerId}/> } />
+          <Route path='/employee/:employeeId' element={<EmployeeDetails EMPS={EMPS}/>} />
         </React.Fragment>
       )
     }

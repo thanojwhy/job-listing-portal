@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
 import TimeAgo from '../../shared/Util/TimeAgo';
+import { AuthContext } from '../../shared/context/auth-context';
+import { Posted } from '../employer/posted';
+import ApplicantList from '../employee/applicants-list';
 
 import Card from '../../shared/UI/Card';
 
@@ -118,6 +121,7 @@ const JOBS = [
 ];
 
 const JobDetails = () =>{
+    const auth=useContext(AuthContext);
 
     const jid=useParams().jobId;
 
@@ -128,17 +132,8 @@ const JobDetails = () =>{
     }
 
     const timeAgo=<TimeAgo date={job.posted} />
-
-    return ( 
-        <div className='card-group row'>
-            <div className='container'>
-                <Card 
-                    classnames="m-3 p-3"
-                    header={"Job Details"}
-                    title={job.title}
-                    company={job.company}
-                    footer={timeAgo}
-                >
+    const details=(
+                <React.Fragment>
                     <div>
                         <div>
                             <b>Employment Type</b>
@@ -184,7 +179,29 @@ const JobDetails = () =>{
                             </ul>
                         </div>
                     </div>
+                </React.Fragment>
+    )
 
+    return ( 
+        <div className='card-group row'>
+            <div className='container'>
+                <Card 
+                    classnames="m-3 p-3"
+                    header={"Job Details"}
+                    title={job.title}
+                    company={job.company}
+                    footer={timeAgo}
+                >
+                    {auth.isLoggedIn &&
+                        Posted(jid)===true ?
+                            <React.Fragment>
+                                <ApplicantList jobId={jid} />
+                            </React.Fragment>
+                        :
+                            details
+                    }
+                    {!auth.isLoggedIn && details}
+                    
                 </Card>
             </div>
         </div>
