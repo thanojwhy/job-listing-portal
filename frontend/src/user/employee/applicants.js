@@ -9,7 +9,6 @@ const Applicants = (props) =>{
             <td><Link to={`/employee/${applicant.id}`} className='text-decoration-none'>{applicant.name}</Link></td>
             <td>{applicant.email}</td>
             <td>{applicant.location}</td>
-            <td><Link to={applicant.linkedin} target='__blank'>{applicant.linkedin}</Link></td>
         </tr>
     )
 }

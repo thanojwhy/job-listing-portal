@@ -43,13 +43,12 @@ const ApplicantList = (props) =>{
       return <h3>No Applicants so far</h3>
     }
     return (
-      <table className='table table-responsive table-hover'>
+      <table className='table table-hover'>
         <thead>
           <tr>
             <td>Name</td>
             <td>Email</td>
             <td>Location</td>
-            <td>Linkedin</td>
           </tr>
         </thead>
         <tbody>
