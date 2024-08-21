@@ -16,6 +16,7 @@ const Auth = () =>{
         email:'',
         password:'',
     })
+    const [error,setError]=useState(null);
 
     const loginHandler = () =>{
         setLoginMode(prevMode=>!prevMode);
@@ -29,9 +30,33 @@ const Auth = () =>{
         }))
     }
 
-    const submitHandler = event =>{
+    const submitHandler = async event =>{
         event.preventDefault();
-        auth.login();
+        setError(null);
+        try{
+            const response=await fetch('http://localhost:5000/api/users/login',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify({
+                    email:formData.email,
+                    password:formData.password
+                })
+            });
+
+            const responseData = await response.json();
+            if(!response.ok){
+                throw new Error(responseData.message || 'Login failed');
+            }
+
+            localStorage.setItem('token',responseData.token);
+            localStorage.setItem('userType',responseData.userType);
+            localStorage.setItem('userTypeId',responseData.userTypeId);
+            auth.login();
+        } catch(err){
+            setError(err.message || 'something went wrong try again');
+        }
     }
 
     return (
@@ -65,6 +90,7 @@ const Auth = () =>{
                     }
                     <Input className='is-invalid col-md-7' type='email' label='Email' name='email' invalid='Please enter a valid email' required value={formData.email} onChange={inputChangeHandler} />
                     <Input classnames='col-md-7' type='password' label='Password' name='password' required min={6} invalid='Password should be at least 6 characters' onChange={inputChangeHandler}/>
+                    {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
                     <Button className='btn-primary' type='submit'>{loginMode ? 'Login' : 'Sign Up'}</Button>
                 </form>
             </Card>

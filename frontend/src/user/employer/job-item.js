@@ -10,12 +10,12 @@ const JobItem = (props) =>{
 
     const {job}=props;
 
-    const timeAgo=<TimeAgo date={job.posted} />
+    const timeAgo=<TimeAgo date={new Date(job.posted)} />
 
     const applicantsCount = job.applicants ? job.applicants.length : 0;
 
     return ( 
-        <Link to={`/jobs/${job.id}`} className='text-dark text-decoration-none'>
+        <Link to={`/jobs/${job._id}`} className='text-dark text-decoration-none'>
             <Card
                 classnames="mb-4"
                 title={job.title}

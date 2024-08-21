@@ -1,15 +1,15 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 
 import Input from '../../shared/FormElems/Input';
 import Button from '../../shared/FormElems/Button';
+import { useParams } from 'react-router-dom';
 
-const Profile = (props) =>{
-    const {EMP}=props;
-
+const Profile = () =>{
+    const [EMP,setEMP]=useState(null);
+    const {employeeId}=useParams();
     const [formData,setFormData]=useState({
-        fname:EMP.name,
-        lname:'',
-        email:EMP.email,
+        name:'',
+        email:'',
         location:'',
         education:[{
             degree:'',
@@ -25,10 +25,50 @@ const Profile = (props) =>{
             startDate:'',
             endDate:''
         }],
-        skills: ['MERN'],
+        skills:[''],
         linkedin:'',
         gitHub:'',
     })
+
+    useEffect(()=>{
+        const getEmployee = async ()=>{
+            try{
+                const res=await fetch(`http://localhost:5000/api/employee/${employeeId}`);
+                const data=await res.json();
+                setEMP(data);
+            } catch(err){
+                console.log(err);
+            }
+        }
+        getEmployee();
+    },[employeeId])
+
+    useEffect(()=>{
+        if(EMP){
+            setFormData({
+                name:EMP.name || '',
+                email:EMP.email || '',
+                location:EMP.location || '',
+                education:EMP.education || [{
+                    degree:'',
+                    institution:'',
+                    cgpa:'',
+                    startDate:'',
+                    endDate:''
+                }],
+                experience: EMP.experience || [{
+                    position:'',
+                    company:'',
+                    salary:'',
+                    startDate:'',
+                    endDate:''
+                }],
+                skills: EMP.skills || [''],
+                linkedin:EMP.linkedin || '',
+                gitHub:EMP.gitHub || '',
+            })
+        }
+    },[EMP]);
 
     const inputChangeHandler = (event,index,section) =>{
         const {name,value}=event.target;
@@ -46,10 +86,28 @@ const Profile = (props) =>{
             }))
         }
     }
+    const addSkillHandler = () => {
+        setFormData(prevData => ({
+            ...prevData,
+            skills: [...prevData.skills, '']
+        }));
+    };
 
-    const updateHandler = event =>{
+    const updateHandler = async event =>{
         event.preventDefault();
-        console.log(formData);
+        try{
+            const res=await fetch(`http://localhost:5000/api/employee/profile/${employeeId}`,{
+                method:'PATCH',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify(formData),
+            })
+            const updatedData=await res.json();
+            setEMP(updatedData);
+        } catch(err){
+            console.error(err);
+        }
     }
 
     return (
@@ -62,9 +120,8 @@ const Profile = (props) =>{
                     </div>
                     <h4>-&gt;Basic Details</h4>
                     <div className='row '>
-                        <div className='col-6 col-md-3'><Input label='First Name' type='text' name='fname' value={formData.fname} onChange={inputChangeHandler}/></div>
-                        <div className='col-6 col-md-3'><Input label='Last Name' type='text' name='lname' value={formData.lname} onChange={inputChangeHandler}/></div>
-                        <div className='col-8 col-md-4'><Input label='Mail' type='email' name='email' value={formData.email} onChange={inputChangeHandler}/></div>
+                        <div className='col-5 col-md-4'><Input label='Name' type='text' name='name' value={formData.name} onChange={inputChangeHandler}/></div>
+                        <div className='col-8 col-md-6'><Input label='Mail' type='email' name='email' value={formData.email} onChange={inputChangeHandler}/></div>
                         <div className='col-4 col-md-2'><Input label='Location' type='text' name='location' value={formData.location} onChange={inputChangeHandler}/></div>
                     </div>
                     <h4>-&gt;Education</h4>
@@ -97,11 +154,14 @@ const Profile = (props) =>{
                     </div>
                     <h4>-&gt;Skills</h4>
                     <div className='mb-3 row'>
-                    {formData.skills.map((skill,index)=>{
-                        return (
-                            <div key={index} className='col-4 col-md-3'><Input label={`Skill ${index+1}`} type='text' name='skills' value={skill} onChange={e=>inputChangeHandler(e,index,'skills')}/></div>
-                        )
-                    })}
+                        {formData.skills.map((skill,index)=>{
+                            return (
+                                <div key={index} className='col-4 col-md-3'><Input label={`Skill ${index+1}`} type='text' name='skills' value={skill} onChange={e=>inputChangeHandler(e,index,'skills')}/></div>
+                            )
+                        })}
+                        <div className='col-2 pt-3'>
+                                <i className='bi bi-plus-circle' onClick={addSkillHandler} style={{ cursor: 'pointer' }}></i>
+                        </div>
                     </div>
                     <h4>-&gt;Links</h4>
                     <div>

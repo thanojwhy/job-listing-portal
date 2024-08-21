@@ -17,9 +17,20 @@ const Card = (props) =>{
 
     const [didApply,setDidApply]=useState(Applied(jobId));
 
-    const apply = () =>{
-        setDidApply(true);
-        //TODO add application to employee and jobs
+    const apply = async () =>{
+        try{
+            const res=await fetch(`http://localhost:5000/api/jobs/${jobId}/apply`,{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify({employeeId:auth.userTypeId})
+            });
+            const data=await res.json();
+            setDidApply(data);
+        } catch(err){
+            console.log(err);
+        } 
     }
 
     const applyBtn = (

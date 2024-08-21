@@ -14,7 +14,7 @@ const NavNavLinks = () =>{
             <NavLink to='/' className='nav-link'>Home</NavLink>
             <NavLink to='/jobs' className='nav-link'>Jobs</NavLink>
             {auth.isLoggedIn && auth.userType==='Employee' &&
-                <NavLink to='/profile' className='nav-link'>Profile</NavLink>
+                <NavLink to={`/profile/${auth.userTypeId}`} className='nav-link'>Profile</NavLink>
             }
             {auth.isLoggedIn && auth.userType==='Employer' &&
                 <NavLink to='/job/new' className='nav-link'>New Job</NavLink>
