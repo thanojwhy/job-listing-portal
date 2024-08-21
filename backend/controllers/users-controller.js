@@ -41,8 +41,6 @@ const signup = async(req,res,next)=>{
         return next(error);
     }
 
-    res.status(201).json({user:createdUser.toObject({getters:true})});
-
     if(userType==='Employee'){
         const createdEmployee=new Employee({
             name,
@@ -50,12 +48,16 @@ const signup = async(req,res,next)=>{
             userId:createdUser._id,
             linkedin:'',
             gitHub:'',
+            education: [{}],
+            skills:[''],
+            experience:[{}],
         });
     
         try{
             await createdEmployee.save();
         } catch(err){
-            const error=new HttpError('Failed to Sign up',500);
+            const error=new HttpError('Failed to Sign up emp',500);
+            console.log(err)
             return next(error);
         }
     } else{
@@ -71,6 +73,8 @@ const signup = async(req,res,next)=>{
             return next(error);
         }
     }
+
+    res.status(201).json({user:createdUser.toObject({getters:true})});
 
 }
 

@@ -1,8 +1,5 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-
-import {Posted} from '../../user/employer/posted';
-import { Applied } from '../../user/employee/applied';
 
 import ArrowNav from '../Util/ArrowNav';
 import Button from '../FormElems/Button';
@@ -15,29 +12,43 @@ const Card = (props) =>{
     const auth=useContext(AuthContext);
     const {jobId}=useParams();
 
-    const [didApply,setDidApply]=useState(Applied(jobId));
+    const [didApply,setDidApply]=useState(false);
+    
+    useEffect(()=>{
+        const applied = async () =>{
+            try {
+                const response = await fetch(`http://localhost:5000/api/jobs/${auth.userTypeId}/applied`);
+                const data = await response.json();
+                const job = data.filter(job => job._id === jobId);
+                if(job[0].applicants.includes(auth.userTypeId)){
+                    setDidApply(true);
+                }
+            } catch (err) {
+                
+            }
+         }
+         applied()
+    })
 
     const apply = async () =>{
         try{
-            const res=await fetch(`http://localhost:5000/api/jobs/${jobId}/apply`,{
+            await fetch(`http://localhost:5000/api/jobs/${jobId}/apply`,{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json',
                 },
                 body:JSON.stringify({employeeId:auth.userTypeId})
             });
-            const data=await res.json();
-            setDidApply(data);
+            setDidApply(true)
         } catch(err){
             console.log(err);
         } 
     }
 
     const applyBtn = (
-        auth.userType==='Employee' ?
-        <Button type='button' className={`btn ${didApply ? 'btn-primary' : 'btn-success'}`} onClick={apply}>{didApply ? 'Applied' : 'Apply'}</Button> 
-        : 
-        Posted(jobId) ===true ? <Button type='button' className='btn btn-success' >Edit</Button> : ''
+        auth.userType==='Employee' &&
+        <Button type='button' className={`btn ${didApply ? 'btn-primary' : 'btn-success'}`} onClick={apply} disabled={didApply} >{didApply ? 'Applied' : 'Apply'}</Button> 
+        
     )
 
     return (

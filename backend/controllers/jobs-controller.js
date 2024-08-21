@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const {validationResult}=require('express-validator');
 
 const HttpError=require('../models/http-error');
-const User=require('../models/User');
 const Employee=require('../models/Employee');
 const Employer=require('../models/Employer');
 const Job=require('../models/Job');
@@ -52,7 +51,6 @@ const getAppliedJobs = async(req,res,next)=>{
         appliedJobs= await Job.find({applicants:empId});
     } catch(err){
         const error=new HttpError('Could not fetch jobs, try again',500);
-        console.log(err);
         return next(error);
     }
     if(appliedJobs.length===0){

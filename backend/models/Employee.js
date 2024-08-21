@@ -3,19 +3,19 @@ const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
 
 const ExperienceSchema = new Schema({
-    position: { type: String, required: true },
-    company: { type: String, required: true },
-    startDate: { type: String, required: true },
-    endDate: { type: String, required: true },
-    salary: { type: Number, required: true }
+    position: { type: String },
+    company: { type: String },
+    startDate: { type: String },
+    endDate: { type: String },
+    salary: { type: Number }
 }, { _id: false });
 
 const EducationSchema = new Schema({
-    degree: { type: String, required: true },
-    institution: { type: String, required: true },
-    cgpa: { type: Number, required: true },
-    startDate: { type: String, required: true },
-    endDate: { type: String, required: true }
+    degree: { type: String },
+    institution: { type: String },
+    cgpa: { type: Number },
+    startDate: { type: String },
+    endDate: { type: String }
 }, { _id: false });
 
 const EmployeeSchema = new Schema({

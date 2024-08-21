@@ -32,9 +32,11 @@ const Jobs = (props) =>{
                 </ul>
             }
             <Animation>
-                <div className='row row-cols-1 row-cols-sm-2 row-cols-md-3 mt-3'>
-                    <JobItemList jobs={props.jobs}/>
-                </div>
+                {props.jobs && 
+                    <div className='row row-cols-1 row-cols-sm-2 row-cols-md-3 mt-3'>
+                        <JobItemList jobs={props.jobs} applied={props.applied}/>
+                    </div>
+                }
             </Animation>
         </div>
     )

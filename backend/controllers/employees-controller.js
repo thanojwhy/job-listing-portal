@@ -5,6 +5,18 @@ const HttpError=require('../models/http-error');
 const Employee=require('../models/Employee');
 const User=require('../models/User');
 
+const getEmployeeByJobId = async (req,res,next)=>{
+    let employee;
+    const jId=req.params.jobId;
+    try{
+        employee=await Employee.find({applications:jId});
+    } catch(err){
+        const error = new HttpError('Fetching employees failed',500);
+        return next(error);
+    }
+    res.json(employee);
+}
+
 const getEmployeeById = async (req,res,next)=>{
     let employee;
     const eId=req.params.employeeId;
@@ -12,6 +24,7 @@ const getEmployeeById = async (req,res,next)=>{
         employee=await Employee.findById(eId);
     } catch(err){
         const error = new HttpError('Fetching employees failed',500);
+        console.log(err);
         return next(error);
     }
     res.json(employee);
@@ -55,3 +68,4 @@ const updateEmployee = async (req,res,next)=>{
 
 exports.getEmployeeById=getEmployeeById;
 exports.updateEmployee=updateEmployee;
+exports.getEmployeeByJobId=getEmployeeByJobId;

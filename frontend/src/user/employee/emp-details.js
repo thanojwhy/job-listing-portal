@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Card from '../../shared/UI/Card';
 import { useParams } from 'react-router-dom';
 
-const EmployeeDetails = (props) =>{
-    const {EMPS}=props;
+const EmployeeDetails = () =>{
 
-    const empId=useParams('employeeId');
+    const [emp,setEmp]=useState();
 
-    const emp = EMPS.find(emp=>emp.id=empId)
+    const {employeeId}=useParams();
+
+    useEffect(()=>{
+        const getEmp = async ()=>{
+            try{
+                const res=await fetch(`http://localhost:5000/api/employee/${employeeId}`);
+                const data=await res.json();
+                setEmp(data);
+            } catch(err){
+                console.log(err);
+            }
+        }
+        getEmp();
+    },[employeeId])
+
+    if(!emp){
+        return (
+            <h1 className='text-muted'>...Loading</h1>
+        )
+    }
+    console.log(emp)
 
     return(
         <div className='container-md col-lg-8'>
@@ -36,7 +55,7 @@ const EmployeeDetails = (props) =>{
                 
                 <div className='row mb-3'>
                     <h4 className='text-muted'>Experience</h4>
-                    {emp.experience.map((exp,index)=>
+                    {emp.experience && emp.experience.map((exp,index)=>
                         <div key={index} className='col-4 col-md-3 border rounded p-2'>
                             <div>
                                 <b>Company</b>
@@ -64,7 +83,7 @@ const EmployeeDetails = (props) =>{
                 
                 <div className='row mb-3'>
                     <h4 className='text-muted'>Education</h4>
-                    {emp.education.map((edu,index)=>
+                    {emp.education && emp.education.map((edu,index)=>
                         <div key={index} className='col-4 col-md-3 border rounded p-2'>
                             <div>
                                 <b>Institute</b>
@@ -92,7 +111,7 @@ const EmployeeDetails = (props) =>{
 
                 <h4 className='text-muted'>Skills</h4>
                 <div className='mb-3 row'>
-                    {emp.skills.map(skill=><span className='col-2 col-md-1 m-2 badge bg-primary'>{skill}</span>)}
+                    {emp.skills && emp.skills.map(skill=><span className='col-2 col-md-1 m-2 badge bg-primary'>{skill}</span>)}
                 </div>
 
                 <hr />

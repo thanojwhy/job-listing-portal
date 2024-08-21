@@ -14,38 +14,6 @@ import { AnimatePresence } from 'framer-motion';
 import Animation from './shared/Util/Animation';
 import EmployeeDetails from './user/employee/emp-details';
 
-const EMPS = [
-  {
-    id: 'e1',
-    userId: 'u1',
-    name: 'Kate Abdo',
-    email: 'Katie@example.com',
-    location: 'California',
-    experience: [
-      {
-        position : 'Intern',
-        company: 'BWS',
-        startDate: '2022-08-25',
-        endDate: '2024-03-03',
-        salary: 130000,
-      },
-    ],
-    education: [
-      {
-        degree: 'Bachelor of Science in Computer Science',
-        institution: 'University of California, Berkeley',
-        cgpa: 4.15,
-        startDate:'2018-08-12',
-        endDate: '2022-07-03',
-      }
-    ],
-    skills: ['MERN Stack','Spring','Java','Python'],
-    linkedin : "https://linkedin.com",
-    gitHub : "https://github.com",
-    applications: ['j1','j2'],
-  }
-]
-
 const App = () => {
   const isAuth=localStorage.getItem('isAuth');
 
@@ -68,13 +36,14 @@ const App = () => {
   },[])
 
   const [jobs,setJobs]=useState([]);
-    const [filteredJobs,setFilteredJobs]=useState([]);
+  const [filteredJobs,setFilteredJobs]=useState([]);
 
   useEffect(()=>{
       const fetchJobs=async ()=>{
           if(userType==='Employee'){
               try{
-                  const res=await fetch(`http://localhost:5000/api/jobs/${userTypeId}/applied`);                    const data=await res.json();
+                  const res=await fetch(`http://localhost:5000/api/jobs/${userTypeId}/applied`);                    
+                  const data=await res.json();
                   setFilteredJobs(data);
               } catch(err){
                   console.log(err);
@@ -115,7 +84,7 @@ const App = () => {
           <Route path='/jobs' element={<Jobs jobs={jobs}/>} />
           <Route path='/job/new' element={<Animation><JobPost/></Animation>} />
           <Route path='/jobs/:employerId/posted' element={<Jobs jobs={filteredJobs}/> } />
-          <Route path='/employee/:employeeId' element={<EmployeeDetails EMPS={EMPS}/>} />
+          <Route path='/employee/:employeeId' element={<EmployeeDetails/>} />
         </React.Fragment>
       )
     }

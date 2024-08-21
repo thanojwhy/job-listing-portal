@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Input from '../../shared/FormElems/Input';
 import Button from '../../shared/FormElems/Button';
 
+import {AuthContext} from '../../shared/context/auth-context';
+
 const JobPost = () => {
+
+    const auth=useContext(AuthContext);
   
     const [formData, setFormData] = useState({
-        jobTitle: '',
+        title: '',
         company: '',
         type: '',
         experience: '',
@@ -14,7 +18,7 @@ const JobPost = () => {
         location: '',
         description: '',
         skills: [''],
-        responsibilities: ['']
+        roles: ['']
     });
 
     
@@ -47,22 +51,37 @@ const JobPost = () => {
     const handleAddResponsibility = () => {
         setFormData((prevData) => ({
             ...prevData,
-            responsibilities: [...prevData.responsibilities, '']
+            roles: [...prevData.roles, '']
         }));
     };
 
     const handleResponsibilityChange = (index, value) => {
-        const newResponsibilities = [...formData.responsibilities];
-        newResponsibilities[index] = value;
+        const newRoles = [...formData.roles];
+        newRoles[index] = value;
         setFormData((prevData) => ({
             ...prevData,
-            responsibilities: newResponsibilities
+            roles: newRoles
         }));
     };
 
-    const postHandler = event =>{
+    const postHandler = async event =>{
         event.preventDefault();
-        console.log(formData);
+        try {
+            const response = await fetch(`http://localhost:5000/api/jobs/${auth.userTypeId}/new`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to post the job');
+            }
+        } catch (err) {
+            console.error('Error posting job:', err);
+        }
+        
     }
 
     return (
@@ -75,8 +94,8 @@ const JobPost = () => {
                             <Input
                                 label='Job Title'
                                 type='input'
-                                name='jobTitle'
-                                value={formData.jobTitle}
+                                name='title'
+                                value={formData.title}
                                 required='required'
                                 onChange={handleChange}
                             />
@@ -172,13 +191,13 @@ const JobPost = () => {
 
                         <div className='row'>
                             <div className='col-10'>
-                                {formData.responsibilities.map((responsibility, index) => (
+                                {formData.roles.map((role, index) => (
                                     <Input
                                         key={index}
                                         label={`Responsibility ${index + 1}`}
                                         type='input'
                                         required='required'
-                                        value={responsibility}
+                                        value={role}
                                         onChange={(e) => handleResponsibilityChange(index, e.target.value)}
                                     />
                                 ))}

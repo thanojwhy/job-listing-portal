@@ -5,6 +5,8 @@ const employeeControllers = require('../controllers/employees-controller');
 
 const router = express.Router();
 
+router.get('/job/:jobId',employeeControllers.getEmployeeByJobId);
+
 router.get('/:employeeId', employeeControllers.getEmployeeById);
 
 router.patch(
