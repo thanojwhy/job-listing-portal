@@ -7,9 +7,7 @@ const NavHeader = () =>{
     return (
         <div className='p-2 d-flex col-12'> 
             <Link to='/' className='col-3 align-self-center d-flex text-decoration-none text-dark'>
-                <span className="bi bi-person-bounding-box fs-4">
-                    <span className='px-2'>Job Portal</span>
-                </span>
+                <span className='px-2'>Job Portal</span>
             </Link>
             <NavLinks />
         </div>

@@ -48,9 +48,21 @@ const signup = async(req,res,next)=>{
             userId:createdUser._id,
             linkedin:'',
             gitHub:'',
-            education: [{}],
+            education: [{
+                degree: '',
+                institution: '',
+                cgpa: 0,
+                startDate: '',
+                endDate: ''
+            }],
             skills:[''],
-            experience:[{}],
+            experience:[{
+                position: '',
+                company: '',
+                startDate: '',
+                endDate: '',
+                salary: 0
+            }],
         });
     
         try{
