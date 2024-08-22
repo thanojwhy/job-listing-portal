@@ -18,7 +18,7 @@ const Jobs = (props) =>{
 
     return (
         <div className=' m-3 p-3 shadow'>
-            {!auth.isLoggedIn && <h3>Global Jobs</h3>}
+            {!auth.isLoggedIn && <h3>Explore Jobs</h3>}
             {auth.isLoggedIn &&
                 <ul className='nav'>
                     <Link to='/jobs'>

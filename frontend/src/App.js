@@ -71,7 +71,7 @@ const App = () => {
     if(userType==='Employee'){
       routes = (
         <React.Fragment>
-          <Route path='/' element={<Animation><AuthDashboard jobs={jobs}/></Animation>} />
+          <Route path='/' element={<Animation><AuthDashboard jobs={jobs} filtered={filteredJobs}/></Animation>} />
           <Route path='/profile/:employeeId' element={<Animation><Profile /></Animation>} />
           <Route path='/jobs' element={<Jobs jobs={jobs}/>} />
           <Route path='/jobs/:employeeId/applied' element={<Jobs jobs={filteredJobs}/> } />
@@ -80,7 +80,7 @@ const App = () => {
     } else if (userType==='Employer') {
       routes = (
         <React.Fragment>
-          <Route path='/' element={<Animation><AuthDashboard jobs={jobs}/></Animation>} />
+          <Route path='/' element={<Animation><AuthDashboard jobs={jobs} filtered={filteredJobs}/></Animation>} />
           <Route path='/jobs' element={<Jobs jobs={jobs}/>} />
           <Route path='/job/new' element={<Animation><JobPost/></Animation>} />
           <Route path='/jobs/:employerId/posted' element={<Jobs jobs={filteredJobs}/> } />

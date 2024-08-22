@@ -27,7 +27,9 @@ const Card = (props) =>{
                 
             }
          }
-         applied()
+         if(auth.userType==='Employee'){
+            applied()
+         }
     })
 
     const apply = async () =>{

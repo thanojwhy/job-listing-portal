@@ -80,7 +80,7 @@ const JobDetails = () =>{
                         <div>
                             <h5><b>Required Skills</b></h5>
                             <ul>
-                                {job.skills.map((skill)=>(
+                                {job.skills && job.skills.map((skill)=>(
                                     <li key={skill}>{skill}</li>
                                 ))}
                             </ul>
@@ -88,7 +88,7 @@ const JobDetails = () =>{
                         <div>
                             <h5><b>Roles and Responsibilities</b></h5>
                             <ul>
-                                {job.roles.map((role)=>(
+                                {job.roles && job.roles.map((role)=>(
                                     <li key={role}>{role}</li>
                                 ))}
                             </ul>
