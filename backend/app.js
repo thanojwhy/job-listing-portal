@@ -31,7 +31,7 @@ app.use((error,req,res,next)=>{
     res.json({message:error.message || "An unknown error occurred"})
 });
 
-url="mongodb+srv://thanoj1992:t3y7z7x8@job-listing-portal.xfqzz.mongodb.net/JobListings?retryWrites=true&w=majority&appName=job-listing-portal"
+url="mongodb+srv://<User>:<Password>@job-listing-portal.xfqzz.mongodb.net/JobListings?retryWrites=true&w=majority&appName=job-listing-portal"
 mongoose.connect(url)
     .then(()=>{
         app.listen(5000)
